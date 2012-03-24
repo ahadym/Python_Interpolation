@@ -1,3 +1,11 @@
 This program display a window in which you could *click* with your mouse to
-display points. This points will be linked together using a Lagrange interpollation,
-so you can see what kind of curves this algorithm products.
+display points. This points will be linked together using different methods
+of interpolation, so you can see what kind of curves this algorithm products.
+
+
+Currently, 2 methods are used :
+
+  ~ Newton (in red)
+  ~ Lagrange (in green)
+
+You can see that, in fact, they are very similar

@@ -5,9 +5,41 @@ SCREEN_WIDTH = 1640
 SCREEN_HEIGHT = 980
 
 
+def newton(points, x):
+  """
+    Using Newton's method, interpol the points present in the 'points' list
+      and return the value of the polynom at point x.
+  """
+
+  res = 0.0
+  array = []
+
+  points = sorted (points)
+
+  for j in xrange(0, len(points)):
+    array.append([0.0] * (len(points) + 1))
+    array[j][0] = float(points[j][0])
+    array[j][1] = float(points[j][1])
+
+  res += array[0][1]
+  tmp = x - array[0][0]
+
+  for i in xrange(2, len(points) + 1):
+    for j in xrange(0, len(points) - i + 1):
+      try:
+        array[j][i] = float(array[j + 1][i - 1] - array[j][i - 1]) / float(array[j + i - 1][0] - array[j][0])
+      except:
+        pass
+    res += tmp * array[0][i]
+    tmp *= x - array[i - 1][0]
+
+  return res
+
+
+
 def lagrange(points, x):
   """
-    Using Lagrange method, interpol the points present in the 'points' list
+    Using Lagrange's method, interpol the points present in the 'points' list
     and return the value of the polynom at point x.
   """
 
@@ -15,30 +47,30 @@ def lagrange(points, x):
 
   for i in xrange(0, len(points)):
     tmp = float(points[i][1])
-    try:
-      for j in xrange(0, len(points)):
-        if i == j:
-          continue
+    for j in xrange(0, len(points)):
+      if i == j:
+        continue
+      try:
         tmp *= float(x - points[j][0]) / float(points[i][0] - points[j][0])
-      res += tmp
-    except:
-      pass
+      except:
+        pass
+    res += tmp
 
   return int(res)
 
 
 
 
-def interpol(points):
+def interpol(points, method):
   """
     Using the interpolation, build the set of points to draw
   """
 
   result = []
-  lagrange_compute = functools.partial(lagrange, points)
+  points_compute = functools.partial(method, points)
 
   for i in xrange(0, SCREEN_WIDTH, 2):
-    result.append((i, lagrange_compute(i)))
+    result.append((i, points_compute(i)))
 
   return result
 
@@ -69,7 +101,8 @@ def main():
       rect = pygame.Rect(p[0] - 5, p[1] - 5, 10, 10)
       pygame.draw.rect(screen, (0, 0, 255), rect, 4)
     if len(points) > 1:
-      pygame.draw.aalines(screen, (0, 255, 0), False, interpol(points), 1)
+      pygame.draw.aalines(screen, (0, 255, 0), False, interpol(points, lagrange), 1)
+      pygame.draw.aalines(screen, (255, 0, 0), False, interpol(points, newton), 1)
     pygame.display.flip()
 
 
