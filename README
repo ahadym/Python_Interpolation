@@ -1,6 +1,6 @@
-This program display a window in which you could *click* with your mouse to
+This program displays a window in which you could *click* with your mouse to
 display points. This points will be linked together using different methods
-of interpolation, so you can see what kind of curves this algorithm products.
+of interpolation, so you can see what kind of curves this algorithms product.
 
 
 Currently, 2 methods are used :
